@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bitcoin-microservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bitcoin-microservice
+  template:
+    metadata:
+      labels:
+        app: bitcoin-microservice
+    spec:
+      containers:
+        - name: bitcoin-microservice
+          image: bitcoin-microservice:latest
+          ports:
+            - containerPort: 5000
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.ApiKey }}
+                  key: api-key
